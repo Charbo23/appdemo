@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+			    <div class="mui-input-row">
+			        <label>titel</label>
+			    <input type="text" class="mui-input-clear" id="title" placeholder="请输入title">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>value</label>
+			        <input type="text" class="mui-input-password" id="value" placeholder="请输入value">
+			    </div>
+			    <div class="mui-button-row">
+			        <button type="button" id="promary" class="mui-btn mui-btn-primary" >确认</button>
+			        <button type="button" class="mui-btn mui-btn-danger" >取消</button>
+			    </div>
+			</form>
+		</div>
+		
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function(){
+				document.getElementById("promary").addEventListener('tap', function(){
+					var turl = plus.storage.getItem('myurl')+ "News/add";
+					var tdata = {}; //封装表单数据
+					tdata.title = document.getElementById("title").value;
+					tdata.value = document.getElementById("value").value;
+					//请求服务器
+					mui.post(turl, tdata, function(data){
+						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
+							mui.toast(data.msg);
+							mui.back();
+						} else {
+							mui.toast(data.msg);	
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+
+</html>

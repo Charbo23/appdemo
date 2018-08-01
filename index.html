@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">条目列表</h1>
+			<a class="mui-icon mui-icon-plusempty mui-pull-right" id="add"></a>
+		</header>
+		<div class="mui-content" id="pullrefresh">
+			<ul class="mui-table-view" id="new-list">
+			    <li class="mui-table-view-cell">Item 1</li>
+			</ul>
+		</div>
+		
+		
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			//下拉刷新
+			mui.init({
+				beforeback: function() {  
+					//防止返回键回到登录界面
+					return false;
+			   	},
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						height:60,
+						callback: pulldownRefresh
+					},
+				}
+			});
+			
+			
+			//POST请求。查询列表数据
+			mui.plusReady(function(){
+				var itemUrl = plus.storage.getItem('myurl')+ "News/getLists";
+				var tdata = {};//封装要发往服务器的数据，这里就不放了
+				tdata.id = 1;
+				mui.post(itemUrl, tdata, function(data){
+					if(data.code){ 
+						//将服务器返回的数据写入页面
+						addData(data.data);
+					} else {
+						mui.toast(data.msg);	
+					}
+				});
+				
+			});
+			
+			function addData(data){
+				var listul = document.getElementById("new-list");
+				listul.innerHTML = "";//清空内容
+				for(var i = 0; i < data.length; i++){
+					listul.innerHTML += '<li class="mui-table-view-cell">title的值: '+ data[i].title +'，value的值:'+data[i].value  +'  </li>';
+				}
+			}
+			
+			
+			document.getElementById("add").addEventListener("tap", function(){
+				mui.openWindow({
+					url: 'add.html',
+					id: 'add',
+					styles: {
+						top: '0px', //新页面顶部位置
+						bottom: '0px', //新页面底部位置
+					},
+				});
+			});
+			
+			//下拉刷新
+			function pulldownRefresh(){
+				setTimeout(function() {
+					var itemUrl = plus.storage.getItem('serverUrl')+ "News/getLists";
+					var tdata = {};//封装要发往服务器的数据，这里就不放了
+					tdata.id = 1;
+					mui.post(itemUrl, tdata, function(data){
+						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
+							//将服务器返回的数据写入页面
+							addData(data.data);
+							mui.toast("刷新成功")
+						} else {
+							mui.toast(data.msg);	
+						}
+					});
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+				}, 1000);
+			}
+			
+			
+
+		</script>
+	</body>
+
+</html>
