@@ -122,13 +122,14 @@
 		<script src="js/app.js"></script>
 		<script>
 			mui.plusReady(function() {
+				//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
+				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/index.php/mobile/');
 				if(plus.storage.getItem('username')){
 					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
 				}else{
-					
-				//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
-				plus.storage.setItem("serverUrl", 'http://192.168.1.63/appdemo/public/index.php/mobile/');
+				
+				
 				//点击登录按钮之后
 				document.getElementById("login").addEventListener("tap", function(){
 					//获取表单数据
