@@ -132,7 +132,10 @@
 					//mui.alert(JSON.stringify(logindata));    //弹出 data的值，可用此方法调试服务器返回的数据
 					
 					//对表单数据进行验证比如输入的用户名为空。。。这里就不验证了
-					
+					if(!logindata.username||!logindata.password){
+						openIndex();
+						return;
+					}
 					/*
 					 * 请求方式1：AJAX
 					 * */		

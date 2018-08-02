@@ -6,6 +6,8 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/handlebars.js/4.0.11/handlebars.min.js"></script>
 	</head>
 
 	<body>
@@ -14,12 +16,22 @@
 			<h1 class="mui-title">条目列表</h1>
 			<a class="mui-icon mui-icon-plusempty mui-pull-right" id="add"></a>
 		</header>
-		<div class="mui-content" id="pullrefresh">
-			<ul class="mui-table-view" id="new-list">
-			    <li class="mui-table-view-cell">Item 1</li>
-			</ul>
+		<div class="mui-content mui-scroll-wrapper" id="pullrefresh">
+			<div class="mui-scroll" id="itemList">
+				
+			</div>
 		</div>
-		
+		<script type="text/template" id="tpl">
+	        {{#if itemList}}
+			<ul class="mui-table-view"> 
+			    {{#itemList}} 
+	        		<li class="mui-table-view-cell">{{title}}</li>
+	        	{{/itemList}}
+			</ul>  
+			{{else}}
+			    <p style="text-align: center;margin-top: 50px;font-size: 23px;">暂无条目</p>
+			{{/if}}
+		</script>
 		
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript">
@@ -41,12 +53,10 @@
 			
 			//POST请求。查询列表数据
 			mui.plusReady(function(){
-				var itemUrl = plus.storage.getItem('myurl')+ "News/getLists";
-				var tdata = {};//封装要发往服务器的数据，这里就不放了
-				tdata.id = 1;
-				mui.post(itemUrl, tdata, function(data){
+				var itemUrl = plus.storage.getItem('serverUrl')+ "Item/lst";
+				var itemData = {};//封装要发往服务器的数据，这里就不放了
+				mui.post(itemUrl, itemData, function(data){
 					if(data.code){ 
-						//将服务器返回的数据写入页面
 						addData(data.data);
 					} else {
 						mui.toast(data.msg);	
@@ -56,11 +66,13 @@
 			});
 			
 			function addData(data){
-				var listul = document.getElementById("new-list");
-				listul.innerHTML = "";//清空内容
-				for(var i = 0; i < data.length; i++){
-					listul.innerHTML += '<li class="mui-table-view-cell">title的值: '+ data[i].title +'，value的值:'+data[i].value  +'  </li>';
-				}
+				var tpl =  $("#tpl").html();
+	            //预编译模板
+	            var template = Handlebars.compile(tpl);
+	            //匹配json内容
+	            var html = template(data);
+	            //插入模板
+	            $("#itemList").html(html);
 			}
 			
 			
@@ -78,10 +90,10 @@
 			//下拉刷新
 			function pulldownRefresh(){
 				setTimeout(function() {
-					var itemUrl = plus.storage.getItem('serverUrl')+ "News/getLists";
-					var tdata = {};//封装要发往服务器的数据，这里就不放了
-					tdata.id = 1;
-					mui.post(itemUrl, tdata, function(data){
+					var itemUrl = plus.storage.getItem('serverUrl')+ "Item/lst";
+					var itemData = {};//封装要发往服务器的数据，这里就不放了
+					
+					mui.post(itemUrl, itemData, function(data){
 						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
 							//将服务器返回的数据写入页面
 							addData(data.data);

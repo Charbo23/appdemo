@@ -17,15 +17,15 @@
 		<div class="mui-content">
 			<form class="mui-input-group">
 			    <div class="mui-input-row">
-			        <label>titel</label>
-			    <input type="text" class="mui-input-clear" id="title" placeholder="请输入title">
+			        <label>条目名</label>
+			    <input type="text" class="mui-input-clear" id="title" placeholder="请输入条目名">
 			    </div>
-			    <div class="mui-input-row">
-			        <label>value</label>
-			        <input type="text" class="mui-input-password" id="value" placeholder="请输入value">
+			    <div class="mui-input-row" style="height: auto">
+			        <label>条目内容</label>
+			        <textarea id="content" style="overflow: hidden;height: 200px;" onkeyup="autoGrow(this);"></textarea>
 			    </div>
 			    <div class="mui-button-row">
-			        <button type="button" id="promary" class="mui-btn mui-btn-primary" >确认</button>
+			        <button type="button" id="add" class="mui-btn mui-btn-primary" >确认</button>
 			        <button type="button" class="mui-btn mui-btn-danger" >取消</button>
 			    </div>
 			</form>
@@ -33,16 +33,17 @@
 		
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript">
+			
 			mui.init();
 			
 			mui.plusReady(function(){
-				document.getElementById("promary").addEventListener('tap', function(){
-					var turl = plus.storage.getItem('myurl')+ "News/add";
-					var tdata = {}; //封装表单数据
-					tdata.title = document.getElementById("title").value;
-					tdata.value = document.getElementById("value").value;
+				document.getElementById("add").addEventListener('tap', function(){
+					var addUrl = plus.storage.getItem('myurl')+ "News/add";
+					var addData = {}; //封装表单数据
+					addData.title = document.querySelector('#title').value;
+					addData.content = document.querySelector('#content').value;
 					//请求服务器
-					mui.post(turl, tdata, function(data){
+					mui.post(addUrl, addData, function(data){
 						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
 							mui.toast(data.msg);
 							mui.back();
@@ -52,6 +53,11 @@
 					});
 				});
 			});
+			function autoGrow (oField) {
+			  if (oField.scrollHeight > oField.clientHeight) {
+			    oField.style.height = oField.scrollHeight + "px";
+			  }
+			}
 		</script>
 	</body>
 
