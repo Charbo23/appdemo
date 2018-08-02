@@ -202,10 +202,14 @@
 			},
 			"index.html": {
 				"resources": [
-					"list.html"
+					"list.html",
+					"tab-item.html"
 				],
 				"refer": [
-					"add.html"
+					"add.html",
+					"tab-ucenter.html",
+					"tab-2.html",
+					"tab-3.html"
 				],
 				"priority": 0
 			},
@@ -213,6 +217,15 @@
 				"resources": [],
 				"refer": [
 					"login.html"
+				],
+				"priority": 0
+			},
+			"tab-item.html": {
+				"resources": [
+					"list.html"
+				],
+				"refer": [
+					"add.html"
 				],
 				"priority": 0
 			}

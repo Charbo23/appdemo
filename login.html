@@ -122,9 +122,16 @@
 		<script src="js/app.js"></script>
 		<script>
 			mui.plusReady(function() {
+				var index = plus.webview.create(
+					'index.html',
+					'index', {
+						top: '0px',
+						bottom: '0px',
+					}
+				);
 				//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
 				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/index.php/mobile/');
-				if(plus.storage.getItem('username')){
+				if(plus.storage.getItem('username')&&false){
 					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
 				}else{
@@ -152,7 +159,6 @@
 						type:'post',//HTTP请求类型
 						timeout:10000,//超时时间设置为10秒；	              
 						success:function(data){
-							console.log(JSON.stringify(data));
 							//服务器返回响应，根据响应结果，分析是否登录成功；
 							if(data.code){
 								var user=data.data;
@@ -191,21 +197,24 @@
 				});
 				
 			}
+				function openIndex(){
+			
+				index.show('pop-in', 300);
+//					mui.openWindow({
+//						url: 'index.html',
+//						id: 'index',
+//						styles: {
+//							top: '0px', //新页面顶部位置
+//							bottom: '0px', //新页面底部位置
+//						},
+//						waiting: {
+//							autoShow: true, //自动显示等待框，默认为true
+//						}
+//					});
+				}
 			});
 			
-			function openIndex(){
-					mui.openWindow({
-						url: 'index.html',
-						id: 'index',
-						styles: {
-							top: '0px', //新页面顶部位置
-							bottom: '0px', //新页面底部位置
-						},
-						waiting: {
-							autoShow: true, //自动显示等待框，默认为true
-						}
-					});
-				}
+
 		</script>
 	</body>
 
