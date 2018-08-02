@@ -6,6 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	</head>
 
 	<body>
@@ -15,14 +16,15 @@
 			<h1 class="mui-title">添加</h1>
 		</header>
 		<div class="mui-content">
-			<form class="mui-input-group">
+			<form id='add-form' class="mui-input-group">
+				<input type="hidden" name="uid"  value="" />
 			    <div class="mui-input-row">
 			        <label>条目名</label>
-			    <input type="text" class="mui-input-clear" id="title" placeholder="请输入条目名">
+			    	<input name="title" type="text" class="mui-input-clear" placeholder="请输入条目名">
 			    </div>
 			    <div class="mui-input-row" style="height: auto">
 			        <label>条目内容</label>
-			        <textarea id="content" style="overflow: hidden;height: 200px;" onkeyup="autoGrow(this);"></textarea>
+			        <textarea name="content" style="overflow: hidden;height: 200px;" onkeyup="autoGrow(this);"></textarea>
 			    </div>
 			    <div class="mui-button-row">
 			        <button type="button" id="add" class="mui-btn mui-btn-primary" >确认</button>
@@ -38,19 +40,18 @@
 			
 			mui.plusReady(function(){
 				document.getElementById("add").addEventListener('tap', function(){
-					var addUrl = plus.storage.getItem('myurl')+ "News/add";
-					var addData = {}; //封装表单数据
-					addData.title = document.querySelector('#title').value;
-					addData.content = document.querySelector('#content').value;
+					$('input[name=uid]').val(plus.storage.getItem('uid'));
+					var addData = $('#add-form').serialize(); //封装表单数据
+					var addUrl = plus.storage.getItem('serverUrl')+ "Item/add";
 					//请求服务器
 					mui.post(addUrl, addData, function(data){
 						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
-							mui.toast(data.msg);
+							mui.fire(plus.webview.currentWebview().opener(),'added');
 							mui.back();
 						} else {
 							mui.toast(data.msg);	
 						}
-					});
+					},'json');
 				});
 			});
 			function autoGrow (oField) {

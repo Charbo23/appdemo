@@ -7,6 +7,7 @@
 		<title></title>
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/style.css" rel="stylesheet" />
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 		<style>
 			.area {
 				margin: 20px auto 0px auto;
@@ -91,11 +92,11 @@
 			<form id='reg-form' class="mui-input-group">
 				<div class="mui-input-row">
 					<label>用户名</label>
-					<input id='username' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
+					<input name='username' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名">
 				</div>
 				<div class="mui-input-row">
 					<label>密码</label>
-					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+					<input name='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
 				</div>
 			</form>
 			<div class="mui-content-padded">
@@ -114,9 +115,7 @@
 				//点击登录按钮之后
 				document.getElementById("reg").addEventListener("tap", function(){
 					//获取表单数据
-					var regdata = {};
-					regdata.username = document.querySelector('#username').value;
-					regdata.password = document.querySelector('#password').value;
+					var regdata = $('#reg-form').serialize();
 					
 					/*
 					 * 请求方式1：AJAX
@@ -128,11 +127,13 @@
 						data:regdata,
 						dataType:'json',//服务器返回json格式数据
 						type:'post',//HTTP请求类型
-						timeout:10000,//超时时间设置为10秒；
-						headers:{'Content-Type':'application/json'},	              
+						timeout:10000,//超时时间设置为10秒；              
 						success:function(data){
 							//服务器返回响应，根据响应结果，分析是否登录成功；
 							if(data.code){
+								var user=data.data;
+						 		plus.storage.setItem("username", user.username);
+						 		plus.storage.setItem("uid", user.id);
 								mui.toast(data.msg);
 								openIndex();
 							}else{
@@ -157,7 +158,7 @@
 //							mui.toast(data.msg);
 //							openIndex();
 //						}
-//					 });
+//					 },'json');
 					 
 					 /*
 					  * 请求方式3：Get，和Post方法相同
