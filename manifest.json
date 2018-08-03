@@ -230,6 +230,13 @@
 					"add.html"
 				],
 				"priority": 0
+			},
+			"item-list.html": {
+				"resources": [],
+				"refer": [
+					"item-detail.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

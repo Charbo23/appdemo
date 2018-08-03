@@ -15,14 +15,14 @@
 		
 		<div class="mui-content mui-scroll-wrapper" id="pullrefresh">
 			<div class="mui-scroll" id="itemList">
-				
+				<p style="text-align: center;margin-top: 50%;font-size: 23px;">加载中...</p>
 			</div>
 		</div>
 		<script type="text/template" id="tpl">
 			{{#if data}}
 			<ul class="mui-table-view">
 				{{#data}}
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" item_id="{{id}}">
 					<a class="mui-navigate-right">{{title}}</a>
 				</li>
 				{{/data}}
@@ -56,7 +56,9 @@
 						mui.toast(data.msg);
 					}
 					//给登录界面传值取消等待
-					mui.fire(plus.webview.getWebviewById('HBuilder'),'got');
+					mui.fire(plus.webview.getWebviewById('HBuilder'),'list_loaded');
+					
+			
 				});
 				
 			});
@@ -64,8 +66,6 @@
 				mui('#pullrefresh').pullRefresh().pulldownLoading();
 				if(mui.os.android)
 					pulldownRefresh();
-					
-					
 			}); 
 			//下拉刷新
 			function pulldownRefresh() {
@@ -94,6 +94,15 @@
 				var html = template(data);
 				//插入模板
 				$("#itemList").html(html);
+				mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
+				var item_id=this.getAttribute('item_id');
+//				mui.alert(item_id);
+				
+			    mui.openWindow({
+					url: 'item-detail.html',
+					id: 'item-detail',
+				});
+			});
 			}
 		</script>
 	</body>
