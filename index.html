@@ -33,10 +33,9 @@
 			
 			//下拉刷新
 			mui.init({
-				beforeback: function() {
-					//防止返回键回到登录界面
-					return false;
-				},
+				keyEventBind: {
+					backbutton: false  //关闭back按键监听防止回到登录页
+				}
 			});
 			var subpages = ['tab-item.html', 'tab-2.html', 'tab-3.html', 'tab-ucenter.html'];
 			var subpage_style = {

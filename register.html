@@ -20,7 +20,7 @@
 				margin-top: 20px;
 			}
 			
-			.mui-input-group  {
+			.mui-input-group {
 				padding-left: 5%;
 			}
 			
@@ -99,7 +99,7 @@
 				</div>
 			</form>
 			<div class="mui-content-padded">
-				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>			
+				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
 			</div>
 			<div class="mui-content-padded oauth-area">
 
@@ -109,63 +109,64 @@
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/app.js"></script>
 		<script>
+			
+			mui.init();
 			mui.plusReady(function() {
-				
+			 	regUrl = plus.storage.getItem("serverUrl") + "User/register";
 				//点击登录按钮之后
-				document.getElementById("reg").addEventListener("tap", function(){
+				document.getElementById("reg").addEventListener("tap", function() {
 					//获取表单数据
 					var regdata = $('#reg-form').serialize();
-					
+
 					/*
 					 * 请求方式1：AJAX
-					 * */		
-					
+					 * */
+
 					//从本地内存读取服务器地址，后面的页面可用此方法获取地址
-					var regUrl = plus.storage.getItem("serverUrl") + "User/register";
-					mui.ajax(regUrl,{
-						data:regdata,
-						dataType:'json',//服务器返回json格式数据
-						type:'post',//HTTP请求类型
-						timeout:10000,//超时时间设置为10秒；              
-						success:function(data){
+					mui.ajax(regUrl, {
+						data: regdata,
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；              
+						success: function(data) {
 							//服务器返回响应，根据响应结果，分析是否登录成功；
-							if(data.code){
-								var user=data.data;
-						 		plus.storage.setItem("username", user.username);
-						 		plus.storage.setItem("uid", user.id);
+							if(data.code) {
+								var user = data.data;
+								plus.storage.setItem("username", user.username);
+								plus.storage.setItem("uid", user.id);
 								mui.toast(data.msg);
 								openIndex();
-							}else{
+							} else {
 								mui.toast(data.msg);
 							}
 						},
-						error:function(xhr,type,errorThrown){
+						error: function(xhr, type, errorThrown) {
 							//异常处理；
 							console.log(type);
 						}
 					});
-					
+
 					/*
 					 * 请求方式2：Post
 					 * 参数: 1、服务器地址
 					 *      2、往服务器发送的数据
 					 *      3、服务器返回响应，根据响应结果，分析是否登录成功；
-					 * */	
-//					 mui.post(regUrl, regdata, function(data){
-//					 	//服务器返回响应，根据响应结果，分析是否登录成功；
-//					 	if(data.code){
-//							mui.toast(data.msg);
-//							openIndex();
-//						}
-//					 },'json');
-					 
-					 /*
-					  * 请求方式3：Get，和Post方法相同
-					  * */
+					 * */
+					//					 mui.post(regUrl, regdata, function(data){
+					//					 	//服务器返回响应，根据响应结果，分析是否登录成功；
+					//					 	if(data.code){
+					//							mui.toast(data.msg);
+					//							openIndex();
+					//						}
+					//					 },'json');
+
+					/*
+					 * 请求方式3：Get，和Post方法相同
+					 * */
 
 				});
-				
-				function openIndex(){
+
+				function openIndex() {
 					mui.openWindow({
 						url: 'index.html',
 						id: 'index',
@@ -179,7 +180,6 @@
 					});
 				}
 			});
-				
 		</script>
 	</body>
 

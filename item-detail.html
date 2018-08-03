@@ -7,25 +7,69 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/handlebars.js/4.0.11/handlebars.min.js"></script>
+		<style type="text/css">
+			body,
+			.mui-content {
+				background-color: white;
+			}
+			
+			#item-content {
+				padding: 20px 30px;
+			}
+		</style>
 	</head>
 
 	<body>
-		
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">条目详情</h1>
-		</header>
-		<div class="mui-content">
-			
-		</div>
-		
+
+		<div id="body">
+
+		</div id="body">
+		<script type="text/template" id="tpl">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">{{title}}</h1>
+			</header>
+			<div class="mui-content">
+				<div id="item-content">
+					{{content}}
+				</div>
+				<div id="item-footer" class="mui-text-right">
+					<p>{{uid}}</p>
+					<p>{{time}}</p>
+				</div>
+			</div>
+		</script>
+
 		<script src="js/mui.js"></script>
 		<script type="text/javascript">
-			
-			mui.init();
-			
-			mui.plusReady(function(){
-				
+			mui.init({
+			});
+			mui.plusReady(function() {
+				detailUrl = plus.storage.getItem('serverUrl') + 'Item/detail';
+				window.addEventListener('getDetail', function(e) {
+					var item_id = e.detail.item_id;
+					mui.post(detailUrl, {
+						item_id: item_id
+					}, function(data) {
+						if(data.code) {
+							var tpl = $("#tpl").html();
+							//预编译模板
+							var template = Handlebars.compile(tpl);
+							//取出返回数据中的data部分匹配模板
+							var html = template(data.data);
+							//插入模板
+							$("#body").html(html);
+							//加载完成取消等待，显示页面
+							plus.nativeUI.closeWaiting();
+					    	mui.currentWebview.show('pop-in',300);
+						} else {
+							plus.nativeUI.closeWaiting();
+							mui.toast(data.msg);
+						}
+						
+					}, 'json');
+				});
 			});
 		</script>
 	</body>

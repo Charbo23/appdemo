@@ -118,15 +118,13 @@
 		</div>
 		<script src="js/mui.js"></script>
 		<script>
+			
+			mui.init();
 			mui.plusReady(function() {
-				
-//				var index = mui.preload({
-//				    url:'index.html',
-//				    id:'index',
-//				});
-//				
-				//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
+				//将服务器地址写入本地内存，方便其他页面调用。
 				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/index.php/mobile/');
+				//从本地内存读取服务器地址，后面的页面可用此方法获取地址
+				loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指User控制器下面的login方法
 				if(plus.storage.getItem('username')){ 
 					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
@@ -139,8 +137,7 @@
 					//获取表单数据
 					var logindata = $('#login-form').serialize();
 					
-					//从本地内存读取服务器地址，后面的页面可用此方法获取地址
-					var loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指Login控制下面的login方法
+					
 					
 					mui.ajax(loginUrl,{
 						data:logindata,
@@ -168,8 +165,8 @@
 				
 			}
 				function openIndex(){
-					var nwaiting = plus.nativeUI.showWaiting("登录中...");//显示原生等待框 
-					//后台创建webview并打开index.html 
+					plus.nativeUI.showWaiting("登录中...");//显示原生等待框 
+					//后台创建index.html 
 					var index = plus.webview.create('index.html','index');
 					window.addEventListener('list_loaded',function(){
 						plus.nativeUI.closeWaiting();

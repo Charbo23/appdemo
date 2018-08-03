@@ -12,7 +12,6 @@
 
 	<body>
 
-		
 		<div class="mui-content mui-scroll-wrapper" id="pullrefresh">
 			<div class="mui-scroll" id="itemList">
 				<p style="text-align: center;margin-top: 50%;font-size: 23px;">加载中...</p>
@@ -34,58 +33,65 @@
 
 		<script src="js/mui.js"></script>
 		<script type="text/javascript">
-			//下拉刷新
 			mui.init({
 				pullRefresh: {
 					container: '#pullrefresh',
 					down: {
-						height: 60, 
+						height: 60,
 						callback: pulldownRefresh
 					},
-				}
+				},
 			});
 
 			//POST请求。查询列表数据
 			mui.plusReady(function() {
-				var itemUrl = plus.storage.getItem('serverUrl') + "Item/lst";
+				itemUrl = plus.storage.getItem('serverUrl') + "Item/lst";
 				var itemData = {}; //封装要发往服务器的数据，这里就不放了
-				mui.post(itemUrl, itemData, function(data) { 
+				mui.post(itemUrl, itemData, function(data) {
 					if(data.code) {
-						addData(data); 
+						addData(data);
 					} else {
 						mui.toast(data.msg);
 					}
 					//给登录界面传值取消等待
-					mui.fire(plus.webview.getWebviewById('HBuilder'),'list_loaded');
-					
-			
-				});
-				
+					mui.fire(plus.webview.getWebviewById('HBuilder'), 'list_loaded');
+					detail = mui.preload({
+						url: 'item-detail.html',
+						id: 'item-detail',
+						styles: {
+							top: '0px',
+							bottom: '0px',
+							popGesture: "hide"
+						}
+					});
+
+				}, 'json');
+
 			});
-			window.addEventListener('added',function(event){
+			window.addEventListener('added', function(event) {
 				mui('#pullrefresh').pullRefresh().pulldownLoading();
 				if(mui.os.android)
 					pulldownRefresh();
-			}); 
+			});
 			//下拉刷新
 			function pulldownRefresh() {
 				setTimeout(function() {
-					var itemUrl = plus.storage.getItem('serverUrl') + "Item/lst";
+
 					var itemData = {}; //封装要发往服务器的数据，这里就不放了
 
 					mui.post(itemUrl, itemData, function(data) {
-						if(data.code) { //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
+						if(data.code) { 
 							//将服务器返回的数据写入页面
 							addData(data);
 							mui.toast("刷新成功");
 						} else {
 							mui.toast(data.msg);
 						}
-					});
+					}, 'json');
 					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
 				}, 1000);
 			}
-			
+
 			function addData(data) {
 				var tpl = $("#tpl").html();
 				//预编译模板
@@ -95,14 +101,18 @@
 				//插入模板
 				$("#itemList").html(html);
 				mui('.mui-table-view').on('tap', '.mui-table-view-cell', function() {
-				var item_id=this.getAttribute('item_id');
-//				mui.alert(item_id);
-				
-			    mui.openWindow({
-					url: 'item-detail.html',
-					id: 'item-detail',
+					var item_id = this.getAttribute('item_id');
+					//mui.alert(item_id);
+					mui.fire(detail, 'getDetail', {
+						item_id: item_id
+					});
+					//显示原生等待框，加载详情页面
+					plus.nativeUI.showWaiting();
+//					mui.openWindow({
+//						url: 'item-detail.html',
+//						id: 'item-detail',
+//					});
 				});
-			});
 			}
 		</script>
 	</body>

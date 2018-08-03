@@ -39,10 +39,11 @@
 			mui.init();
 			
 			mui.plusReady(function(){
+				addUrl = plus.storage.getItem('serverUrl')+ "Item/add";
 				document.getElementById("add").addEventListener('tap', function(){
+					document.activeElement.blur();//关闭软键盘
 					$('input[name=uid]').val(plus.storage.getItem('uid'));
 					var addData = $('#add-form').serialize(); //封装表单数据
-					var addUrl = plus.storage.getItem('serverUrl')+ "Item/add";
 					//请求服务器
 					mui.post(addUrl, addData, function(data){
 						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
