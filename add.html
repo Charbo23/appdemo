@@ -33,7 +33,7 @@
 			</form>
 		</div>
 		
-		<script src="js/mui.min.js"></script>
+		<script src="js/mui.js"></script>
 		<script type="text/javascript">
 			
 			mui.init();
@@ -46,7 +46,7 @@
 					//请求服务器
 					mui.post(addUrl, addData, function(data){
 						if(data.code){ //tp5 控制器 $this->success()方法返回code = 1， error返回code=0
-							mui.fire(plus.webview.currentWebview().opener(),'added');
+							mui.fire(plus.webview.getWebviewById('item-list'),'added');
 							mui.back();
 						} else {
 							mui.toast(data.msg);	

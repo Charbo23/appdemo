@@ -32,7 +32,7 @@
 			{{/if}}
 		</script>
 
-		<script src="js/mui.min.js"></script>
+		<script src="js/mui.js"></script>
 		<script type="text/javascript">
 			//下拉刷新
 			mui.init({
@@ -49,17 +49,23 @@
 			mui.plusReady(function() {
 				var itemUrl = plus.storage.getItem('serverUrl') + "Item/lst";
 				var itemData = {}; //封装要发往服务器的数据，这里就不放了
-				mui.post(itemUrl, itemData, function(data) {
+				mui.post(itemUrl, itemData, function(data) { 
 					if(data.code) {
-						addData(data);
+						addData(data); 
 					} else {
 						mui.toast(data.msg);
 					}
+					//给登录界面传值取消等待
+					mui.fire(plus.webview.getWebviewById('HBuilder'),'got');
 				});
-
+				
 			});
 			window.addEventListener('added',function(event){
 				mui('#pullrefresh').pullRefresh().pulldownLoading();
+				if(mui.os.android)
+					pulldownRefresh();
+					
+					
 			}); 
 			//下拉刷新
 			function pulldownRefresh() {

@@ -6,7 +6,6 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/style.css" rel="stylesheet" />
 		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 		<style>
 			.area {
@@ -117,21 +116,18 @@
 
 			</div>
 		</div>
-		<script src="js/mui.min.js"></script>
-		<script src="js/mui.enterfocus.js"></script>
-		<script src="js/app.js"></script>
+		<script src="js/mui.js"></script>
 		<script>
 			mui.plusReady(function() {
-				var index = plus.webview.create(
-					'index.html',
-					'index', {
-						top: '0px',
-						bottom: '0px',
-					}
-				);
+				
+//				var index = mui.preload({
+//				    url:'index.html',
+//				    id:'index',
+//				});
+//				
 				//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
 				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/index.php/mobile/');
-				if(plus.storage.getItem('username')&&false){
+				if(plus.storage.getItem('username')){ 
 					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
 				}else{
@@ -139,16 +135,9 @@
 				
 				//点击登录按钮之后
 				document.getElementById("login").addEventListener("tap", function(){
+					document.activeElement.blur();//关闭软键盘
 					//获取表单数据
 					var logindata = $('#login-form').serialize();
-					//mui.alert(JSON.stringify(logindata));    //弹出 data的值，可用此方法调试服务器返回的数据
-					
-					//对表单数据进行验证比如输入的用户名为空。。。这里就不验证了
-					
-					/*
-					 * 请求方式1：AJAX
-					 * */		
-					//将服务器地址写入本地内存，方便其他页面调用。 服务器地址具体查看word文档
 					
 					//从本地内存读取服务器地址，后面的页面可用此方法获取地址
 					var loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指Login控制下面的login方法
@@ -164,7 +153,6 @@
 								var user=data.data;
 						 		plus.storage.setItem("username", user.username);
 						 		plus.storage.setItem("uid", user.id);
-								mui.toast(data.msg);
 								openIndex();
 							}else{
 								mui.toast(data.msg);
@@ -175,42 +163,18 @@
 							console.log(type);
 						}
 					});
-					
-					/*
-					 * 请求方式2：Post
-					 * 参数: 1、服务器地址
-					 *      2、往服务器发送的数据
-					 *      3、服务器返回响应，根据响应结果，分析是否登录成功；
-					 * */	
-//					 mui.post(loginUrl, logindata, function(data){
-//					 	//服务器返回响应，根据响应结果，分析是否登录成功；
-//					 	if(data.code){
-//							mui.toast(data.msg);
-//							openIndex();
-//						}
-//					 },'json');
-					 
-					 /*
-					  * 请求方式3：Get，和Post方法相同
-					  * */
 
 				});
 				
 			}
 				function openIndex(){
-			
-				index.show('pop-in', 300);
-//					mui.openWindow({
-//						url: 'index.html',
-//						id: 'index',
-//						styles: {
-//							top: '0px', //新页面顶部位置
-//							bottom: '0px', //新页面底部位置
-//						},
-//						waiting: {
-//							autoShow: true, //自动显示等待框，默认为true
-//						}
-//					});
+					var nwaiting = plus.nativeUI.showWaiting();//显示原生等待框 
+					//后台创建webview并打开index.html 
+					webviewShow = plus.webview.create('index.html','index');
+					window.addEventListener('got',function(){
+						plus.nativeUI.closeWaiting();
+						webviewShow.show('pop-in',300); 
+					});
 				}
 			});
 			

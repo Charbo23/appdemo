@@ -196,7 +196,8 @@
 				"resources": [],
 				"refer": [
 					"index.html",
-					"register.html"
+					"register.html",
+					"tab-item.html"
 				],
 				"priority": 0
 			},
@@ -222,7 +223,8 @@
 			},
 			"tab-item.html": {
 				"resources": [
-					"list.html"
+					"list.html",
+					"item-list.html"
 				],
 				"refer": [
 					"add.html"
@@ -232,7 +234,7 @@
 		},
 		"idle": {
 			"resources": [
-				"js/mui.min.js",
+				"js/mui.js",
 				"fonts/mui.ttf",
 				"css/mui.min.css",
 				"js/mui.js",
