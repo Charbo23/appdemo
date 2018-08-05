@@ -237,6 +237,13 @@
 					"item-detail.html"
 				],
 				"priority": 0
+			},
+			"tab-ucenter.html": {
+				"resources": [],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

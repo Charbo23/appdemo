@@ -20,11 +20,11 @@
 		<script type="text/template" id="tpl">
 			{{#if data}}
 			<ul class="mui-table-view">
-				{{#data}}
+				{{#each data}}
 				<li class="mui-table-view-cell" item_id="{{id}}">
 					<a class="mui-navigate-right">{{title}}</a>
 				</li>
-				{{/data}}
+				{{/each}}
 			</ul>
 			{{else}}
 			<p style="text-align: center;margin-top: 50px;font-size: 23px;">暂无条目</p>
@@ -55,6 +55,7 @@
 					}
 					//给登录界面传值取消等待
 					mui.fire(plus.webview.getWebviewById('HBuilder'), 'list_loaded');
+					mui.fire(plus.webview.getWebviewById('register'), 'list_loaded');
 					detail = mui.preload({
 						url: 'item-detail.html',
 						id: 'item-detail',

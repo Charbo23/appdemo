@@ -167,17 +167,17 @@
 				});
 
 				function openIndex() {
-					mui.openWindow({
-						url: 'index.html',
-						id: 'index',
-						styles: {
-							top: '0px', //新页面顶部位置
-							bottom: '0px', //新页面底部位置
-						},
-						waiting: {
-							autoShow: true, //自动显示等待框，默认为true
-						}
+					plus.nativeUI.showWaiting("注册成功登录中...");//显示原生等待框 
+					//后台创建index.html 
+					var index = plus.webview.create('index.html','index');
+					window.addEventListener('list_loaded',function(){
+						plus.nativeUI.closeWaiting();
+						index.show('pop-in',300); 
+						setTimeout(function(){
+							document.getElementById("login-form").reset();
+						},500);
 					});
+					
 				}
 			});
 		</script>

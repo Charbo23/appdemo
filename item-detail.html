@@ -17,6 +17,9 @@
 			#item-content {
 				padding: 20px 30px;
 			}
+			#item-footer{
+				padding-right: 20px;;
+			}
 		</style>
 	</head>
 
@@ -32,10 +35,10 @@
 			</header>
 			<div class="mui-content">
 				<div id="item-content">
-					{{content}}
+					{{{content}}}
 				</div>
 				<div id="item-footer" class="mui-text-right">
-					<p>{{uid}}</p>
+					<p>{{user.username}}</p>
 					<p>{{time}}</p>
 				</div>
 			</div>
@@ -43,6 +46,9 @@
 
 		<script src="js/mui.js"></script>
 		<script type="text/javascript">
+			var delay=0;
+			if(mui.os.android)
+				delay=100;
 			mui.init({
 			});
 			mui.plusReady(function() {
@@ -61,8 +67,10 @@
 							//插入模板
 							$("#body").html(html);
 							//加载完成取消等待，显示页面
-							plus.nativeUI.closeWaiting();
-					    	mui.currentWebview.show('pop-in',300);
+							setTimeout(function(){
+								plus.nativeUI.closeWaiting();
+					    		mui.currentWebview.show('pop-in',300);
+							},delay);
 						} else {
 							plus.nativeUI.closeWaiting();
 							mui.toast(data.msg);

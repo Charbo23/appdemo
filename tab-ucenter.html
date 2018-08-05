@@ -12,14 +12,89 @@
 	</head>
 
 	<body>
-
-		<header class="mui-bar mui-bar-nav"> 
-			<h1 class="mui-title">个人中心</h1>
+		<header class="mui-bar mui-bar-nav" style="background: white;">
+			<h1 id="title" class="mui-title">个人中心</h1>
 		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell mui-media">
+					<a class="mui-navigate-right" href="#account">
+						
+						<img class="mui-media-object mui-pull-left head-img" src="###">
+						<div class="mui-media-body">
+							<p class='mui-ellipsis'>用户名：</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron" style="margin-top: 15px;">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						1
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						2
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						3
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a id="about" class="mui-navigate-right">
+						4
+					</a>
+				</li>
+			
+			</ul>
+			
+			<ul class="mui-table-view" style="margin-top: 25px;">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" id="option">
+						设置
+					</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 25px;">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right" id="exit">
+						退出当前账号
+					</a>
+				</li>
+			</ul>
+		</div>
+		</style>
 		<script src="js/mui.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			mui.plusReady(function() {
+				
+			});
+			document.getElementById("exit").addEventListener("tap", function(){
+					plus.storage.removeItem('username');
+					plus.storage.removeItem('id');
+					mui.openWindow({
+						url: 'login.html',
+						id: 'HBuilder',
+						createNew:true,
+						show:{
+					      aniShow:'slide-in-left',
+					      duration:300
+					    },
+					});
+//					plus.webview.close('HBuilder');
+//					plus.webview.close('index');
+					var pages = plus.webview.all();
+					for(var i = 0; i < pages.length; i++){
+						if(pages[i].id=='HBuilder')
+							continue;
+						plus.webview.close(pages[i].id);
+					}
+					
 			});
 		</script>
 	</body>

@@ -109,7 +109,7 @@
 			</form>
 			<div class="mui-content-padded">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='reg' href="register.html">注册</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				<div class="link-area"><a id='reg'>注册</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
 				</div>
 			</div>
 			<div class="mui-content-padded oauth-area">
@@ -118,27 +118,29 @@
 		</div>
 		<script src="js/mui.js"></script>
 		<script>
-			
+			document.getElementById("reg").addEventListener("tap", function(){
+				mui.openWindow({
+					url:'register.html',
+					id:'register',
+				});
+			});
 			mui.init();
 			mui.plusReady(function() {
 				//将服务器地址写入本地内存，方便其他页面调用。
-				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/index.php/mobile/');
+				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/mobile/');
 				//从本地内存读取服务器地址，后面的页面可用此方法获取地址
 				loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指User控制器下面的login方法
-				if(plus.storage.getItem('username')){ 
+				//自动登录
+				if(plus.storage.getItem('username')){
 					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
-				}else{
-				
+				}
 				
 				//点击登录按钮之后
 				document.getElementById("login").addEventListener("tap", function(){
 					document.activeElement.blur();//关闭软键盘
 					//获取表单数据
 					var logindata = $('#login-form').serialize();
-					
-					
-					
 					mui.ajax(loginUrl,{
 						data:logindata,
 						dataType:'json',//服务器返回json格式数据
@@ -162,8 +164,6 @@
 					});
 
 				});
-				
-			}
 				function openIndex(){
 					plus.nativeUI.showWaiting("登录中...");//显示原生等待框 
 					//后台创建index.html 
@@ -171,11 +171,14 @@
 					window.addEventListener('list_loaded',function(){
 						plus.nativeUI.closeWaiting();
 						index.show('pop-in',300); 
+						setTimeout(function(){
+							document.getElementById("login-form").reset();
+						},500);
 					});
 				}
 			});
 			
-
+			
 		</script>
 	</body>
 
