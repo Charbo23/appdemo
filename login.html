@@ -132,7 +132,7 @@
 				loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指User控制器下面的login方法
 				//自动登录
 				if(plus.storage.getItem('username')){
-					mui.toast('当前用户：'+plus.storage.getItem('username'));
+//					mui.toast('当前用户：'+plus.storage.getItem('username'));
 					openIndex();
 				}
 				
@@ -176,6 +176,9 @@
 						},500);
 					});
 				}
+				window.addEventListener('refresh',function(){
+						location.reload();
+				});
 			});
 			
 			

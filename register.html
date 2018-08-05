@@ -115,6 +115,7 @@
 			 	regUrl = plus.storage.getItem("serverUrl") + "User/register";
 				//点击登录按钮之后
 				document.getElementById("reg").addEventListener("tap", function() {
+					document.activeElement.blur();//关闭软键盘
 					//获取表单数据
 					var regdata = $('#reg-form').serialize();
 
@@ -131,11 +132,11 @@
 						success: function(data) {
 							//服务器返回响应，根据响应结果，分析是否登录成功；
 							if(data.code) {
+								mui.toast(data.msg);
 								var user = data.data;
 								plus.storage.setItem("username", user.username);
 								plus.storage.setItem("uid", user.id);
-								mui.toast(data.msg);
-								openIndex();
+								toLogin();
 							} else {
 								mui.toast(data.msg);
 							}
@@ -166,18 +167,14 @@
 
 				});
 
-				function openIndex() {
-					plus.nativeUI.showWaiting("注册成功登录中...");//显示原生等待框 
-					//后台创建index.html 
-					var index = plus.webview.create('index.html','index');
-					window.addEventListener('list_loaded',function(){
-						plus.nativeUI.closeWaiting();
-						index.show('pop-in',300); 
-						setTimeout(function(){
-							document.getElementById("login-form").reset();
-						},500);
-					});
+				function toLogin() {	
+					//转到登录界面自动登录
 					
+					mui.openWindow({
+						url: 'login.html',
+						id: 'HBuilder',
+					});
+					mui.fire(plus.webview.getWebviewById('HBuilder'),'refresh');
 				}
 			});
 		</script>

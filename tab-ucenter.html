@@ -77,24 +77,16 @@
 			document.getElementById("exit").addEventListener("tap", function(){
 					plus.storage.removeItem('username');
 					plus.storage.removeItem('id');
-					mui.openWindow({
-						url: 'login.html',
-						id: 'HBuilder',
-						createNew:true,
-						show:{
-					      aniShow:'slide-in-left',
-					      duration:300
-					    },
-					});
-//					plus.webview.close('HBuilder');
-//					plus.webview.close('index');
 					var pages = plus.webview.all();
 					for(var i = 0; i < pages.length; i++){
 						if(pages[i].id=='HBuilder')
 							continue;
 						plus.webview.close(pages[i].id);
 					}
-					
+					mui.openWindow({
+						url: 'login.html',
+						id: 'HBuilder',
+					});
 			});
 		</script>
 	</body>
