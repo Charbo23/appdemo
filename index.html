@@ -6,25 +6,29 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/iconfont.css" /> 
+		<link rel="stylesheet" href="css/font-awesome.min.css">
 	</head>
 
 	<body>
 		<nav class="mui-bar mui-bar-tab">
-			<a id="defaultTab" class="mui-tab-item mui-active" href="tab-item.html">
-				<span class="mui-icon mui-icon-list"></span>
-				<span class="mui-tab-label">条目</span>
+			<a class="mui-tab-item mui-active" href="tab-home.html">
+				<i class="mui-icon fa fa-home"></i>
+				<span class="mui-tab-label">首页</span>
 			</a>
-			<a class="mui-tab-item" href="tab-2.html">
-				<span class="mui-icon iconfont icon-dongtai1"></span>
+			<a class="mui-tab-item" href="tab-message.html">
+				<span class="mui-icon fa fa-commenting"></span>
+				<span class="mui-tab-label">消息</span>
+			</a>
+			<a class="mui-tab-item" href="tab-reports.html">
+				<span class="mui-icon fa fa-flag"></span>
+				<span class="mui-tab-label">随手拍</span>
+			</a>
+			<a class="mui-tab-item" href="tab-share.html">
+				<span class="mui-icon fa fa-compass"></span>
 				<span class="mui-tab-label">动态</span>
 			</a>
-			<a class="mui-tab-item" href="tab-3.html">
-				<span class="mui-icon iconfont icon-pindao"></span>
-				<span class="mui-tab-label">频道</span>
-			</a>
 			<a class="mui-tab-item" href="tab-ucenter.html">
-				<span class="mui-icon mui-icon-contact"></span>
+				<span class="mui-icon fa fa-user"></span>
 				<span class="mui-tab-label">个人中心</span>
 			</a>
 		</nav>
@@ -38,7 +42,7 @@
 					return false;
 			    } 
 			});
-			var subpages = ['tab-item.html', 'tab-2.html', 'tab-3.html', 'tab-ucenter.html'];
+			var subpages = ['tab-home.html', 'tab-message.html', 'tab-reports.html', 'tab-share.html', 'tab-ucenter.html'];
 			var subpage_style = {
 				top: '0px',
 				bottom: '50px',
@@ -55,7 +59,7 @@
 					height:document.documentElement.clientHeight+"px"
 				})
 				var self = plus.webview.currentWebview();
-				for(var i = 0; i < 4; i++) {
+				for(var i = 0; i < 5; i++) {
 					var temp = {};
 					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
 					if(i > 0) {
