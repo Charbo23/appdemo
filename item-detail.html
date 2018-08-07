@@ -52,7 +52,7 @@
 			mui.init({
 			});
 			mui.plusReady(function() {
-				detailUrl = plus.storage.getItem('serverUrl') + 'Item/detail';
+				detailUrl = localStorage.getItem('serverUrl') + 'Item/detail';
 				window.addEventListener('getDetail', function(e) {
 					var item_id = e.detail.item_id;
 					mui.post(detailUrl, {

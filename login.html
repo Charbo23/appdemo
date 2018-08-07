@@ -20,7 +20,7 @@
 				margin-top: 20px;
 			}
 			
-			.mui-input-group  {
+			.mui-input-group {
 				padding-left: 5%;
 			}
 			
@@ -96,89 +96,81 @@
 					<label>密码</label>
 					<input name='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
 				</div>
-				<div class="mui-input-row">
-					<label>自动登录</label>
-					<div id="autoLogin" class="mui-switch">
-							<div class="mui-switch-handle"></div>
-						</div>
-				</div>
 			</form>
 			<div class="mui-content-padded">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='reg'>注册</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				<div class="link-area">
+					<a id='reg'>注册</a> <span class="spliter">|</span>
+					<a id='forgetPassword'>忘记密码</a>
 				</div>
-			</div>
-			<div class="mui-content-padded oauth-area">
-
 			</div>
 		</div>
 		<script src="js/mui.js"></script>
 		<script>
-			document.getElementById("reg").addEventListener("tap", function(){
-				mui.openWindow({
-					url:'register.html',
-					id:'register',
-				});
-			});
 			mui.init();
 			mui.plusReady(function() {
-				//将服务器地址写入本地内存，方便其他页面调用。
-				plus.storage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/mobile/');
-				//从本地内存读取服务器地址，后面的页面可用此方法获取地址
-				loginUrl = plus.storage.getItem("serverUrl") + "User/login"; //"User/Login"指User控制器下面的login方法
-				//自动登录
-				if(plus.storage.getItem('username')){
-//					mui.toast('当前用户：'+plus.storage.getItem('username'));
-					openIndex();
-				}
 				
+				//将服务器地址写入本地内存，方便其他页面调用。
+				localStorage.setItem("serverUrl", 'http://47.98.169.52/appdemo/public/mobile/');
+				
+				//从本地内存读取服务器地址，后面的页面可用此方法获取地址
+				loginUrl = localStorage.getItem("serverUrl") + "User/login"; //"User/Login"指User控制器下面的login方法
+				//自动登录
+				if(localStorage.getItem("user"))
+					openIndex();
 				//点击登录按钮之后
-				document.getElementById("login").addEventListener("tap", function(){
-					document.activeElement.blur();//关闭软键盘
+				document.getElementById("login").addEventListener("tap", function() {
+					document.activeElement.blur(); //关闭软键盘
 					//获取表单数据
 					var logindata = $('#login-form').serialize();
-					mui.ajax(loginUrl,{
-						data:logindata,
-						dataType:'json',//服务器返回json格式数据
-						type:'post',//HTTP请求类型
-						timeout:10000,//超时时间设置为10秒；	              
-						success:function(data){
+					mui.ajax(loginUrl, {
+						data: logindata,
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；	              
+						success: function(data) {
 							//服务器返回响应，根据响应结果，分析是否登录成功；
-							if(data.code){
-								var user=data.data;
-								console.log(JSON.stringify(user));
-						 		plus.storage.setItem("username", user.username);
-						 		plus.storage.setItem("uid", user.id);
+							if(data.code) {
+								//将用户信息由JSON数据转换成字符串存储
+								var user = JSON.stringify(data.data);
+								localStorage.setItem("user", user);
 								openIndex();
-							}else{
+							} else {
 								mui.toast(data.msg);
 							}
 						},
-						error:function(xhr,type,errorThrown){
+						error: function(xhr, type, errorThrown) {
 							//异常处理；
 							console.log(type);
 						}
 					});
 
 				});
-				function openIndex(){
-					plus.nativeUI.showWaiting("登录中...");//显示原生等待框 
+
+				function openIndex() {
+					plus.nativeUI.showWaiting("登录中..."); //显示原生等待框 
 					//后台创建index.html 
-					var index = plus.webview.create('index.html','index');
-					window.addEventListener('list_loaded',function(){
+					var index = plus.webview.create('index.html', 'index');
+					window.addEventListener('list_loaded', function() {
 						plus.nativeUI.closeWaiting();
-						index.show('pop-in',300); 
-						setTimeout(function(){
+						index.show('pop-in', 300);
+						setTimeout(function() {
 							document.getElementById("login-form").reset();
-						},500);
+						}, 500);
 					});
 				}
-				window.addEventListener('refresh',function(){
-						location.reload();
+				//点击注册按钮后
+				document.getElementById("reg").addEventListener("tap", function() {
+					mui.openWindow({
+						url: 'register.html',
+						id: 'register',
+					});
 				});
+				window.addEventListener('refresh', function() {
+					location.reload();
+				});
+				
 			});
-			
-			
 		</script>
 	</body>
 

@@ -45,7 +45,7 @@
 
 			//POST请求。查询列表数据
 			mui.plusReady(function() {
-				itemUrl = plus.storage.getItem('serverUrl') + "Item/lst";
+				itemUrl = localStorage.getItem('serverUrl') + "Item/lst";
 				var itemData = {}; //封装要发往服务器的数据，这里就不放了
 				mui.post(itemUrl, itemData, function(data) {
 					if(data.code) {

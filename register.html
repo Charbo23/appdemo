@@ -112,7 +112,7 @@
 			
 			mui.init();
 			mui.plusReady(function() {
-			 	regUrl = plus.storage.getItem("serverUrl") + "User/register";
+			 	regUrl = localStorage.getItem("serverUrl") + "User/register";
 				//点击登录按钮之后
 				document.getElementById("reg").addEventListener("tap", function() {
 					document.activeElement.blur();//关闭软键盘
@@ -133,9 +133,8 @@
 							//服务器返回响应，根据响应结果，分析是否登录成功；
 							if(data.code) {
 								mui.toast(data.msg);
-								var user = data.data;
-								plus.storage.setItem("username", user.username);
-								plus.storage.setItem("uid", user.id);
+								var user=JSON.stringify(data.data);
+						 		localStorage.setItem("user", user);
 								toLogin();
 							} else {
 								mui.toast(data.msg);
